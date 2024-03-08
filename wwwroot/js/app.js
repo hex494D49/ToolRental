@@ -73,20 +73,16 @@ app.table = (() => {
 
     const populate = (data, target) => {
 
-        // Assuming data is an array of objects, and the keys represent table column headers
         const keys = Object.keys(data[0]);
-
-        // Create table element
         const table = document.createElement('table');
-
-        // Create table header row
         const headerRow = table.insertRow();
+        
         keys.forEach(key => {
             const th = document.createElement('th');
             th.textContent = key;
             headerRow.appendChild(th);
         });
-        // Add additional headers for Edit and Delete
+        
         headerRow.insertCell().textContent = 'Edit';
         headerRow.insertCell().textContent = 'Delete';
 
@@ -97,14 +93,12 @@ app.table = (() => {
                 cell.textContent = item[key];
             });
 
-            // Add Edit button/link
             const editCell = row.insertCell();
             const editButton = document.createElement('button');
             editButton.textContent = 'Edit';
             editButton.addEventListener('click', () => editItem(item));
             editCell.appendChild(editButton);
 
-            // Add Delete button/link
             const deleteCell = row.insertCell();
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
@@ -112,9 +106,7 @@ app.table = (() => {
             deleteCell.appendChild(deleteButton);
         });
 
-        // Append the table to the document body or any other HTML element
         document.querySelector(target).appendChild(table);
-
     }
 
     return {
