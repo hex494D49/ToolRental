@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>ToolRental</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <script src="js/app.js" asp-append-version="true"></script>
+</head>
+<body>
+
+    <header><h1>Tool Rental</h1></header>
+
+    <main>
+        <div class="tab">
+            <ul>
+                <li class="active">Reservations</li>
+                <li>Tools</li>
+            </ul>
+            <div class="active" id="resevations"></div>
+            <div>
+                <div class="panel">
+                    <div id="form">
+                        <form method="post" action="tools">
+                            <input type="text" name="Name" value="" />
+                            <input type="text" name="PricePerHour" value="" />
+                            <textarea cols="100" rows="5"></textarea>
+                            <button type="button">Cancel</button>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                    <div id="tools"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
