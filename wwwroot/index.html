@@ -1,38 +1,122 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title>ToolRental</title>
-    <link rel="stylesheet" href="css/app.css" />
-    <script src="js/app.js" asp-append-version="true"></script>
+<meta charset="utf-8" />
+<title>ToolRental</title>
+<link rel="stylesheet" href="css/app.css" />
+<script src="js/app.js" asp-append-version="true"></script>
 </head>
 <body>
 
-    <header><h1>Tool Rental</h1></header>
+<header><h1>Tool Rental</h1></header>
 
-    <main>
-        <div class="tab">
-            <ul>
-                <li class="active">Reservations</li>
-                <li>Tools</li>
-            </ul>
-            <div class="active" id="resevations"></div>
-            <div>
-                <div class="panel">
-                    <div id="form">
-                        <form method="post" action="tools">
-                            <input type="text" name="Name" value="" />
-                            <input type="text" name="PricePerHour" value="" />
-                            <textarea cols="100" rows="5"></textarea>
-                            <button type="button">Cancel</button>
-                            <button type="submit">Submit</button>
-                        </form>
-                    </div>
-                    <div id="tools"></div>
+<main>
+
+    <div class="tab">
+        <ul>
+            <li class="active">Reservations</li>
+            <li>Tools</li>
+        </ul>
+        <div class="active">
+            <div class="row">
+                <div class="col-3of4">
+                    <form name="reservation" method="post" action="reservations">
+                        <div class="element">
+                            <label>Id</label>
+                            <input type="text" name="Id" value="" />
+                            <span clss="error"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-1of2">
+                                <div class="element">
+                                    <label>First Name</label>
+                                    <input type="text" name="FirstName" value="" />
+                                    <span clss="error"></span>
+                                </div>
+                            </div>
+                            <div class="col-1of2">
+                                <div class="element">
+                                    <label>Last Name</label>
+                                    <input type="text" name="LastName" value="" />
+                                    <span clss="error"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="element">
+                            <label>Note</label>
+                            <textarea name="Note" cols="100" rows="5"></textarea>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>Tool Name</td>
+                                    <td>Starting DateTime</td>
+                                    <td>Ending DateTime</td>
+                                    <td>Price Per Hour</td>
+                                    <td>Amount</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="element select">
+                                            <input type="hidden" name="Id" value="" />
+                                            <input type="text" name="tool-query" id="Id" value="" placeholder="Tool" autocomplete="off">
+                                        </div>
+                                    </td>
+                                    <td><input type="text" name="Starting DateTime" value="" /></td>
+                                    <td><input type="text" name="Ending DateTime" value="" /></td>
+                                    <td>Price Per Hour</td>
+                                    <td>Amount</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5">Total Amount</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <button type="button">Cancel</button>
+                        <button type="submit">Submit</button>
+                    </form>
                 </div>
+                <div class="col-1of4" id="reservations"></div>
             </div>
         </div>
-    </main>
+        <div>
+            <div class="row">
+                <div class="col-1of4">
+                    <form method="post" action="tools">
+                        <div class="element">
+                            <label>Id</label>
+                            <input type="text" name="Id" value="" />
+                            <span clss="error"></span>
+                        </div>
+                        <div class="element">
+                            <label>Name</label>
+                            <input type="text" name="Name" value="" />
+                            <span clss="error"></span>
+                        </div>
+                        <div class="element">
+                            <label>Price Per Hour</label>
+                            <input type="text" name="PricePerHour" value="" />
+                            <span clss="error"></span>
+                        </div>
+                        <div class="element">
+                            <label>Description</label>
+                            <textarea nme="Description" cols="100" rows="5"></textarea>
+                        </div>
+                            <button type="button">Cancel</button>
+                            <button type="submit">Submit</button>
+                    </form>
+                </div>
+                <div class="col-3of4" id="tools"></div>
+            </div>
+        </div>
+    </div>
+
+</main>
 
 </body>
 </html>

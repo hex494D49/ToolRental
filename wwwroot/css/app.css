@@ -16,60 +16,145 @@ body {
     font: 400 100%/1.5rem 'Roboto', sans-serif;
 }
 
+/**
+* grid system
+*
+*/
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 .5em;
+}
+
+.col {
+    flex: 1;
+}
+
+[class^="col"] {
+    padding: 0 .5em;
+}
+
+.col-2of5 {
+    flex: 0 0 40%;
+}
+
+.col-1of2 {
+    flex: 0 0 50%;
+}
+
+.col-3of5 {
+    flex: 0 0 60%;
+}
+.col-1of3 {
+    flex: 0 0 33.3333%;
+}
+.col-2of3 {
+    flex: 0 0 66.6666%;
+}
+
+.col-1of4 {
+    flex: 0 0 25%;
+}
+
+.col-3of4 {
+    flex: 0 0 75%;
+}
+
+.col-4of5 {
+    flex: 0 0 80%;
+}
+
+@media (max-width: 500px) {
+    [class^="col"] {
+        flex: 0 0 100%;
+    }
+}
+
+
+/**
+* form elements
+*
+*/
+.element {
+    position: relative;
+    margin-bottom: 2rem;
+    margin-inline: auto;
+    max-width: 100%;
+    border: 1px solid #aaa;
+    border-radius: 0.75px;
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid #ccc;
+    outline: 0;
+    box-shadow: none;
+    transition: all .3s ease-in-out;
+}
+
+
 /** 
-* tab 
+* tab
+*    
 */
 
 .tab {
-    width: 100%;
+    display: flex;
+    align-items: flex-start;
 }
 
-    .tab > ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        border-bottom: 1px solid #101010;
+.tab > ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    border-right: 1px solid #ccc;
+}
+
+    .tab > ul > li {
+        padding: 20px 10px;
+        cursor: pointer;
+        background-color: #ccc;
     }
 
-        .tab > ul > li {
-            list-style: none;
-            margin: 0.5rem;
-            padding: 0.5rem;
-            cursor: pointer;
-            max-width: 10rem;
-            flex: 1;
-        }
+.tab > ul > li.active {
+    background-color: #027bff;
+    color: #fff;
+}
 
-        .tab > ul > li.active {
-            background: #1a1a1a;
-            color: #f7f7f7;
-        }
+.tab > ul > li {
+    flex-grow: 1;
+}
 
-        .tab > div {
-            display: none;
-        }
+.tab > div {
+    display: none;
+    flex-grow: 1;
+    padding: 10px;
+}
 
-        .tab > div.active {
-            display: block;
-        }
+    .tab > div.active {
+        display: block;
+    }
 
 
 /** 
 * panel
+*
 */
 .panel {
     display: flex;
 }
 
     .panel > div:nth-child(1) {
-        flex: 3;
-        background-color: #f0f0f0;
+        flex: 1;
+        max-width: 25%;
     }
 
     .panel > div:nth-child(2) {
-        flex: 1; 
-        background-color: #e0e0e0; 
+        flex: 3; 
     }
 .panel > div {
     flex: 1;
@@ -77,6 +162,7 @@ body {
 
 /** 
 * table 
+*
 */
 table {
     width: 100%
@@ -92,3 +178,100 @@ table {
     table caption {
         text-align: left;
     }
+
+/** 
+* pager 
+*
+*/
+ul.pager {
+    list-style: none;
+    display: flex;
+    padding: 0;
+}
+
+    ul.pager li {
+        margin-right: 5px;
+        display: flex;
+        align-items: center;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+    }
+
+        ul.pager li a {
+            display: block;
+            width: 100%;
+            text-decoration: none;
+            color: #333;
+        }
+
+        ul.pager li.active {
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+
+.element.select:after {
+    content: "";
+    position: absolute;
+    right: 1rem;
+    top: 1.35rem;
+    border: 0.33rem solid #a7a7a7;
+    border-color: #a7a7a7 transparent transparent transparent;
+    transition: .4s all ease-in-out;
+}
+
+.element.select > ul {
+    display: none;
+}
+
+.element.select > input[type="text"]:focus ~ ul {
+    display: block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    max-height: 323px;
+    overflow-y: scroll;
+}
+
+.element.select:focus-within:after {
+    transform: rotate(-180deg);
+    top: 1rem;
+}
+
+.element.select > ul > li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0.5rem;
+    width: 100%;
+    border-top: 1px solid #aaa;
+    cursor: pointer;
+}
+
+    .element.select > ul > li.active,
+    .element.select > ul > li:hover {
+        background: #e1f3ff;
+    }
+
+.element.select > ul::-webkit-scrollbar {
+    width: 5px;
+    background-color: #575757;
+}
+
+.element.select > ul::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+}
+
+.element.select > ul::-webkit-scrollbar-thumb {
+    background-color: #555;
+}
+
+.visible {
+    display: block;
+}
+
+.hidden {
+    display: none;
+}

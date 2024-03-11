@@ -16,27 +16,6 @@ namespace ToolRental.Repository
             _context = context;
         }
 
-        public async Task<Tool> CreateAsync(Tool tool)
-        {
-            await _context.Tools.AddAsync(tool);
-            await _context.SaveChangesAsync();
-            return tool;
-        }
-
-        public async Task<Tool?> DeleteAsync(int id)
-        {
-            var tool = await _context.Tools.FirstOrDefaultAsync(t => t.Id == id);
-
-            if (tool == null)
-            {
-                return null;
-            }
-
-            _context.Tools.Remove(tool);
-            await _context.SaveChangesAsync();
-            return tool;
-        }
-
         public async Task<List<Tool>> GetAllAsync()
         {
             return await _context.Tools.ToListAsync();
@@ -71,9 +50,25 @@ namespace ToolRental.Repository
             return await _context.Tools.FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public Task<bool> ToolExists(int id)
+        public async Task<Tool> CreateAsync(Tool tool)
         {
-            return _context.Tools.AnyAsync(t => t.Id == id);
+            await _context.Tools.AddAsync(tool);
+            await _context.SaveChangesAsync();
+            return tool;
+        }
+
+        public async Task<Tool?> DeleteAsync(int id)
+        {
+            var tool = await _context.Tools.FirstOrDefaultAsync(t => t.Id == id);
+
+            if (tool == null)
+            {
+                return null;
+            }
+
+            _context.Tools.Remove(tool);
+            await _context.SaveChangesAsync();
+            return tool;
         }
 
         public async Task<Tool?> UpdateAsync(int id, ToolDtoOnUpdate toolDto)
@@ -93,6 +88,16 @@ namespace ToolRental.Repository
 
             return tool;
 
+        }
+
+        public Task<bool> ToolExists(int id)
+        {
+            return _context.Tools.AnyAsync(t => t.Id == id);
+        }
+
+        public async Task<int> GetCount()
+        {
+            return await _context.Tools.CountAsync();
         }
     }
 }

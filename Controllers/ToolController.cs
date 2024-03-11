@@ -25,13 +25,24 @@ namespace ToolRental.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
+            var count = await _repository.GetCount();
             var tools = await _repository.GetAllAsync(query);  
             var toolsDto = tools.Select(t => t.ToToolDto());
 
-            return Ok(toolsDto);
+            var result = new
+            {
+                data = toolsDto,
+                pager = new
+                {
+                    total = count,
+                    current = query.PageNumber
+                }
+            };
+
+            return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
 
@@ -62,7 +73,7 @@ namespace ToolRental.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ToolDtoOnUpdate toolDto)
         {
 
@@ -80,7 +91,7 @@ namespace ToolRental.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var tool = await _repository.DeleteAsync(id);

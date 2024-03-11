@@ -1,4 +1,5 @@
 ﻿using ToolRental.DTOs.Reservation;
+using ToolRental.DTOs.Tool;
 using ToolRental.Models;
 
 namespace ToolRental.Mappers
@@ -12,10 +13,7 @@ namespace ToolRental.Mappers
                 Id = reservation.Id,
                 FirstName = reservation.FirstName,
                 LastName = reservation.LastName,
-                DateAdded = reservation.DateAdded,
-                LastModified = reservation.LastModified,
                 Note = reservation.Note,
-                Status = reservation.Status,
                 ReservationDetails = reservation
                                     .ReservationDetails
                                     .Select(r => r.ToReservationDetailDto())
@@ -30,14 +28,25 @@ namespace ToolRental.Mappers
                 Id = reservation.Id,
                 FirstName = reservation.FirstName,
                 LastName = reservation.LastName,
-                DateAdded = reservation.DateAdded,
-                LastModified = reservation.LastModified,
                 Note = reservation.Note,
-                Status = reservation.Status,
                 ReservationDetails = reservation
                                     .ReservationDetails
                                     .Select(r => r.ToReservationDetailDto())
                                     .ToList()
+            };
+        }
+
+        public static Reservation ToReservationDtoOnCreate(this Reservation reservation)
+        {
+            return new Reservation
+            {
+                Id = reservation.Id,
+                FirstName = reservation.FirstName,
+                LastName = reservation.LastName,
+                DateAdded = reservation.DateAdded,
+                LastModified = reservation.LastModified,
+                Note = reservation.Note,
+                Status = reservation.Status
             };
         }
 

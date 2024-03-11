@@ -11,6 +11,7 @@ namespace ToolRental.Interfaces
         Task<Tool> CreateAsync(Tool tool);
         Task<Tool?> UpdateAsync(int id, ToolDtoOnUpdate stockDto);
         Task<Tool?> DeleteAsync(int id);
+        Task<int> GetCount();
         Task<bool> ToolExists(int id);
     }
 }
