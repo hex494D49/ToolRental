@@ -103,7 +103,6 @@ app.table = (function () {
         var firstRow = tbody.rows[0];
         var newRow = firstRow.cloneNode(true);
 
-        // Clear input values in the cloned row
         Array.from(newRow.cells).forEach(function (cell) {
             if (cell.querySelector('input')) {
                 cell.querySelector('input').value = '';
@@ -281,11 +280,9 @@ app.select = (function () {
                 inputQuery.value = li.innerText;
                 hiddenInput.value = li.getAttribute("data-id");
 
-                // Handle the selection, e.g., make an AJAX request, etc.
                 console.log('Selected ID:', hiddenInput.value);
                 console.log('Selected Text:', inputQuery.value);
 
-                // Close the suggestion list or do any other necessary actions
                 current = previous = -1;
             }
         });
@@ -313,7 +310,6 @@ app.select = (function () {
 
         var populateSuggestions = function (data) {
             var ul = select.querySelector('ul');
-            // Create the ul element if it doesn't exist
             if (!ul) {
                 var ul = document.createElement('ul');
                 select.appendChild(ul);
@@ -327,8 +323,8 @@ app.select = (function () {
                 data.forEach(item => {
                     console.log(item);
                     var li = document.createElement('li');
-                    li.textContent = item.name; // Adjust this based on your data structure
-                    li.setAttribute('data-id', item.id); // Adjust this based on your data structure
+                    li.textContent = item.name;
+                    li.setAttribute('data-id', item.id);
                     ul.appendChild(li);
                 });
             }
