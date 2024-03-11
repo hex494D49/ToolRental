@@ -4,6 +4,8 @@ namespace ToolRental.DTOs.Tool
 {
     public class ToolDtoOnUpdate
     {
+        public int Id { get; set; }
+
         [Required]
         [MaxLength(128, ErrorMessage = "Name cannot be over 128 characters")]
         public string Name { get; set; } = string.Empty;

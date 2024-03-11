@@ -3,19 +3,22 @@ using Microsoft.EntityFrameworkCore;
 using ToolRental.Data;
 using ToolRental.DTOs.Reservation;
 using ToolRental.DTOs.Tool;
+using ToolRental.Interfaces;
 using ToolRental.Mappers;
 
 namespace ToolRental.Controllers
 {
-    [Route("/reservations")]
+    [Route("api/reservations")]
     [ApiController]
     public class ReservationController : ControllerBase
     {
         private protected AppDbContext _context;
+        private readonly IToolRepository _repository;
 
-        public ReservationController(AppDbContext context)
+        public ReservationController(AppDbContext context, IToolRepository repository)
         {
             _context = context;
+            _repository = repository;
         }
 
         [HttpGet]
@@ -49,22 +52,22 @@ namespace ToolRental.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ReservationDtoOnCreate toolDto)
+        public async Task<IActionResult> Create([FromBody] ReservationDtoOnCreate reservationDto)
         {
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var tool = toolDto;
+            var reservation = reservationDto;
 
             //return CreatedAtAction(nameof(GetById), new { id = tool.Id }, tool.ToReservationDto());
 
-            return CreatedAtAction(nameof(tool), tool);
+            return CreatedAtAction(nameof(reservation), reservation);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ReservationDtoOnUpdate toolDto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ReservationDtoOnUpdate reservationDto)
         {
             return Ok();
         }
@@ -73,6 +76,12 @@ namespace ToolRental.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            var reservation = _repository.DeleteAsync(id);
+
+            if (reservation == null)
+            {
+                return NotFound();
+            }
 
             return NoContent();
         }

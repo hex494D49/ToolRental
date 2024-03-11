@@ -9,10 +9,11 @@ namespace ToolRental.Interfaces
     {
         Task<List<Reservation>> GetAllAsync(QueryObject query);
         Task<Reservation?> GetByIdAsync(int id);
-        Task<Reservation> CreateAsync(Tool tool);
+        Task<Reservation> CreateAsync(Reservation tool);
         Task<Reservation?> UpdateAsync(int id, ReservationDto toolDto);
-        Task<Tool?> DeleteAsync(int id);
-        Task<bool> ToolExists(int id);
+        Task<Reservation?> DeleteAsync(int id);
+        Task<bool> ReservationlExists(int id);
+        Task<int> GetCount();
 
     }
 }

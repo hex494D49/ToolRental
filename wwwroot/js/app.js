@@ -15,17 +15,15 @@ const app = window.app || (() => {
 
     const getData = () => {
 
-        fetch('tools')
+        fetch('api/tools')
             .then(response => response.json())
-            .then(data => app.table.populate(data, "#tools"))
+            .then(data => app.table.populate(data, "api/tools", "#tools"))
             .catch(error => console.error('Unable to get items.', error));
 
-        /*
-        fetch('reservations')
+        fetch('api/reservations')
             .then(response => response.json())
-            .then(data => app.table.populate(data, "#reservations"))
+            .then(data => app.table.populate(data, "api/reservations", "#reservations"))
             .catch(error => console.error('Unable to get items.', error));
-            */
     }
 
     return {
@@ -72,21 +70,22 @@ app.tab = (() => {
 
 app.table = (function () {
     var table;
+    var url;
 
     var deleteItem = function (itemId) {
         var confirmDelete = confirm("Are you sure you want to delete this item?");
 
         if (confirmDelete) {
-            ajaxRequest('api/tools/' + itemId, 'DELETE', null, function (data) {
+            ajaxRequest(url + '/' + itemId, 'DELETE', null, function (data) {
                 console.log('Delete successful:', data);
             }, function (error) {
-                console.error('Error during delete:', error);
+                console.error('Error during elete:', error);
             });
         }
     };
 
     var editItem = function (itemId) {
-        ajaxRequest('api/tools/' + itemId, 'GET', null, function (data) {
+        ajaxRequest(url + '/' + itemId, 'GET', null, function (data) {
             var form = document.querySelector('form[name="tool"]');
             form.method = 'PUT';
             form.action = 'api/tools/' + itemId;
@@ -176,14 +175,15 @@ app.table = (function () {
         cell.colSpan = Object.keys(pager).length;
 
         if (pager) {
-            buildPager(cell, pager);
+            buildPager(cell, pager, url);
         } else {
             console.warn("No pager data found.");
         }
     };
 
-    var populate = function (payload, target) {
+    var populate = function (payload, endpoint, target) {
         table = document.createElement('TABLE');
+        url = endpoint;
 
         if ('data' in payload && Array.isArray(payload.data) && payload.data.length > 0) {
             var keys = Object.keys(payload.data[0]);
@@ -204,7 +204,7 @@ app.table = (function () {
 })();
 
 
-var buildPager = function (cell, pager) {
+var buildPager = function (cell, pager, url) {
     var ul = document.createElement('ul');
     ul.classList.add('pager');
 
@@ -219,7 +219,7 @@ var buildPager = function (cell, pager) {
 
         if (i !== currentPage) {
             var link = document.createElement('a');
-            link.href = 'api/tools?page=' + i;
+            link.href = url + '?page=' + i;
             link.textContent = i;
             li.appendChild(link);
         } else {
@@ -270,20 +270,22 @@ app.select = (function () {
 
         document.addEventListener('click', (event) => {
             console.log("Clicking... " + event.target.tagName);
-            if (event.target.tagName === "LI") {
-                console.log("Clicking... " + event.target.tagName);
+            if (event.target.matches('.select')) {
+                if (event.target.tagName === "LI") {
+                    console.log("Clicking... " + event.target.tagName);
 
-                let li = event.target;
-                let inputQuery = select.querySelector('input[name$="query"]');
-                let hiddenInput = select.querySelector('input[type="hidden"]');
+                    let li = event.target;
+                    let inputQuery = select.querySelector('input[name$="query"]');
+                    let hiddenInput = select.querySelector('input[type="hidden"]');
 
-                inputQuery.value = li.innerText;
-                hiddenInput.value = li.getAttribute("data-id");
+                    inputQuery.value = li.innerText;
+                    hiddenInput.value = li.getAttribute("data-id");
 
-                console.log('Selected ID:', hiddenInput.value);
-                console.log('Selected Text:', inputQuery.value);
+                    console.log('Selected ID:', hiddenInput.value);
+                    console.log('Selected Text:', inputQuery.value);
 
-                current = previous = -1;
+                    current = previous = -1;
+                }
             }
         });
 
@@ -299,7 +301,7 @@ app.select = (function () {
         };
 
         var fetchSuggestions = function (value) {
-            fetch('/tools?Name=' + value)
+            fetch('api/tools?Name=' + value)
                 .then(response => response.json())
                 .then(data => {
                     //console.log("oHoohOo -> " + JSON.stringify(data));
@@ -354,5 +356,28 @@ var ajaxRequest = function (url, method, data, successCallback, errorCallback) {
         .then(successCallback)
         .catch(errorCallback);
 };
+
+var calculateDatetimeDifference = function(startDatetime, endDatetime) {
+    if (endDatetime < startDatetime) {
+        console.error("Error: endDatetime should be greater than or equal to startDatetime");
+        return null;
+    }
+
+    const millisecondsDiff = Math.abs(endDatetime - startDatetime);
+
+    const seconds = Math.floor(millisecondsDiff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const years = Math.floor(days / 365.25);
+
+    return {
+        "years": years,
+        "days": days % 365,
+        "hours": hours % 24,
+        "minutes": minutes % 60,
+        "seconds": seconds % 60
+    };
+}
 
 window.onload = app.init();

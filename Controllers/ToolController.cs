@@ -8,7 +8,7 @@ using ToolRental.Mappers;
 
 namespace ToolRental.Controllers
 {
-    [Route("/tools")]
+    [Route("api/tools")]
     [ApiController]
     public class ToolController : ControllerBase
     {

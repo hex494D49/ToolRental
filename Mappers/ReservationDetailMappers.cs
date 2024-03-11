@@ -1,4 +1,5 @@
 ﻿using ToolRental.DTOs.ReservationDetail;
+using ToolRental.DTOs.Tool;
 using ToolRental.Models;
 
 namespace ToolRental.Mappers
@@ -17,5 +18,44 @@ namespace ToolRental.Mappers
                 PricePerHour = reservationDetail.PricePerHour
             };
         }
+
+        public static ReservationDetail ToReservationDetail(this ReservationDetailDto reservationDetailDto)
+        {
+            return new ReservationDetail
+            {
+                Id = reservationDetailDto.Id,
+                ReservationId = reservationDetailDto.ReservationId,
+                ToolId = reservationDetailDto.ToolId,
+                StartingDateTime = reservationDetailDto.StartingDateTime,
+                EndingDateTime = reservationDetailDto.EndingDateTime,
+                PricePerHour = reservationDetailDto.PricePerHour
+            };
+        }
+
+        public static ReservationDetail ToReservationDetailDtoOnCreate(this ReservationDetail reservationDetailDto)
+        {
+            return new ReservationDetail
+            {
+                ReservationId = reservationDetailDto.ReservationId,
+                ToolId = reservationDetailDto.ToolId,
+                StartingDateTime = reservationDetailDto.StartingDateTime,
+                EndingDateTime = reservationDetailDto.EndingDateTime,
+                PricePerHour = reservationDetailDto.PricePerHour
+            };
+        }
+
+        public static ReservationDetail ToReservationDetailDtoOnUpdate(this ReservationDetail reservationDetailDto)
+        {
+            return new ReservationDetail
+            {
+                Id = reservationDetailDto.Id,
+                ReservationId = reservationDetailDto.ReservationId,
+                ToolId = reservationDetailDto.ToolId,
+                StartingDateTime = reservationDetailDto.StartingDateTime,
+                EndingDateTime = reservationDetailDto.EndingDateTime,
+                PricePerHour = reservationDetailDto.PricePerHour
+            };
+        }
+
     }
 }

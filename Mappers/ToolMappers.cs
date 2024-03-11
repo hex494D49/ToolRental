@@ -37,5 +37,16 @@ namespace ToolRental.Mappers
             };
         }
 
+        public static Tool ToToolDtoOnUpdate(this ToolDtoOnUpdate toolDto)
+        {
+            return new Tool
+            {
+                Id = toolDto.Id,
+                Name = toolDto.Name,
+                Description = toolDto.Description,
+                PricePerHour = toolDto.PricePerHour
+            };
+        }
+
     }
 }
