@@ -1,7 +1,7 @@
-﻿using ToolRental.DTOs.Tool;
-using ToolRental.Models;
+﻿using Toolental.Domain.Models;
+using ToolRental.Web.DTOs.Tool;
 
-namespace ToolRental.Mappers
+namespace ToolRental.Web.Mappers
 {
     public static class ToolMappers
     {
@@ -12,7 +12,7 @@ namespace ToolRental.Mappers
                 Id = tool.Id,
                 Name = tool.Name,
                 Description = tool.Description,
-                PricePerHour = tool.PricePerHour                
+                PricePerHour = tool.PricePerHour
             };
         }
 
@@ -27,24 +27,24 @@ namespace ToolRental.Mappers
             };
         }
 
-        public static Tool ToToolDtoOnCreate(this ToolDtoOnCreate toolDto)
+        public static Tool ToTool(this ToolOnCreateDto toolOnCreateDto)
         {
             return new Tool
             {
-                Name = toolDto.Name,
-                Description = toolDto.Description,
-                PricePerHour = toolDto.PricePerHour
+                Name = toolOnCreateDto.Name,
+                Description = toolOnCreateDto.Description,
+                PricePerHour = toolOnCreateDto.PricePerHour
             };
         }
 
-        public static Tool ToToolDtoOnUpdate(this ToolDtoOnUpdate toolDto)
+        public static Tool ToTool(this ToolOnUpdateDto toolOnUpdatDto)
         {
             return new Tool
             {
-                Id = toolDto.Id,
-                Name = toolDto.Name,
-                Description = toolDto.Description,
-                PricePerHour = toolDto.PricePerHour
+                Id = toolOnUpdatDto.Id,
+                Name = toolOnUpdatDto.Name,
+                Description = toolOnUpdatDto.Description,
+                PricePerHour = toolOnUpdatDto.PricePerHour
             };
         }
 

@@ -20,10 +20,17 @@ const app = window.app || (() => {
             .then(data => app.table.populate(data, "api/tools", "#tools"))
             .catch(error => console.error('Unable to get items.', error));
 
+        //fetch('api/reservations')
+        //    .then(response => response.json())
+        //    .then(data => app.table.populate(data, "api/reservations", "#reservations"))
+        //    .catch(error => console.error('Unable to get items.', error));
+
         fetch('api/reservations')
             .then(response => response.json())
-            .then(data => app.table.populate(data, "api/reservations", "#reservations"))
+            .then(data => console.log(data))
             .catch(error => console.error('Unable to get items.', error));
+
+
     }
 
     return {
@@ -269,23 +276,19 @@ app.select = (function () {
         });
 
         document.addEventListener('click', (event) => {
-            console.log("Clicking... " + event.target.tagName);
-            if (event.target.matches('.select')) {
-                if (event.target.tagName === "LI") {
-                    console.log("Clicking... " + event.target.tagName);
+            // Check if the clicked element is an 'li' inside the '.select' class
+            if (event.target.matches('.select li')) {
+                let li = event.target;
+                let inputQuery = select.querySelector('input[name$="query"]');
+                let hiddenInput = select.querySelector('input[type="hidden"]');
 
-                    let li = event.target;
-                    let inputQuery = select.querySelector('input[name$="query"]');
-                    let hiddenInput = select.querySelector('input[type="hidden"]');
+                inputQuery.value = li.innerText;
+                hiddenInput.value = li.getAttribute("data-id");
 
-                    inputQuery.value = li.innerText;
-                    hiddenInput.value = li.getAttribute("data-id");
+                console.log('Selected ID:', hiddenInput.value);
+                console.log('Selected Text:', inputQuery.value);
 
-                    console.log('Selected ID:', hiddenInput.value);
-                    console.log('Selected Text:', inputQuery.value);
-
-                    current = previous = -1;
-                }
+                current = previous = -1;
             }
         });
 

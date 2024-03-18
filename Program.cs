@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using ToolRental.Data;
-using ToolRental.Interfaces;
-using ToolRental.Repository;
+using ToolRental.Application.Interfaces;
+using ToolRental.Application.Services;
+using ToolRental.Infrastructure;
+using ToolRental.Infrastructure.Interfaces;
+using ToolRental.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"));
 });
+
+builder.Services.AddScoped<IToolService, ToolService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 
 builder.Services.AddScoped<IToolRepository, ToolRepository>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();

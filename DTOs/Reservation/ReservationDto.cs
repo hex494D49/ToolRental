@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using ToolRental.DTOs.ReservationDetail;
-using ToolRental.Models;
+using ToolRental.Web.DTOs.ReservationDetail;
 
-namespace ToolRental.DTOs.Reservation
+namespace ToolRental.Web.DTOs.Reservation
 {
     public class ReservationDto
     {
@@ -20,7 +19,10 @@ namespace ToolRental.DTOs.Reservation
 
         public string? Note { get; set; }
 
-        public List<ReservationDetailDto> ReservationDetails { get; set; } = [];
+        public List<ReservationDetailDto> ReservationDetails { get; set; } = new List<ReservationDetailDto>();
 
+        //public decimal Total => ReservationDetails.Sum(x => x.SubTotal);
+
+        public decimal Total { get; set; }
     }
 }

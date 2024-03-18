@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ToolRental.DTOs.Tool
+namespace ToolRental.Web.DTOs.Tool
 {
     public class ToolDto
     {
@@ -14,7 +14,7 @@ namespace ToolRental.DTOs.Tool
         public string Name { get; set; } = string.Empty;
 
         public string? Description { get; set; }
-        
+
         [Required]
         [Range(1, 100)]
         public decimal PricePerHour { get; set; }

@@ -1,8 +1,8 @@
-﻿using ToolRental.DTOs.ReservationDetail;
-using ToolRental.DTOs.Tool;
-using ToolRental.Models;
+﻿using Toolental.Domain.Models;
+using ToolRental.Application.Interfaces;
+using ToolRental.Web.DTOs.ReservationDetail;
 
-namespace ToolRental.Mappers
+namespace ToolRental.Web.Mappers
 {
     public static class ReservationDetailMappers
     {
@@ -11,20 +11,19 @@ namespace ToolRental.Mappers
             return new ReservationDetailDto
             {
                 Id = reservationDetail.Id,
-                ReservationId = reservationDetail.ReservationId,
                 ToolId = reservationDetail.ToolId,
+                ToolName = reservationDetail.Tool?.Name ?? string.Empty,
                 StartingDateTime = reservationDetail.StartingDateTime,
                 EndingDateTime = reservationDetail.EndingDateTime,
-                PricePerHour = reservationDetail.PricePerHour
+                PricePerHour = reservationDetail.PricePerHour,
             };
         }
 
-        public static ReservationDetail ToReservationDetail(this ReservationDetailDto reservationDetailDto)
+        public static ReservationDetail ToReservationDetail(this IReservationDetail reservationDetailDto)
         {
             return new ReservationDetail
             {
                 Id = reservationDetailDto.Id,
-                ReservationId = reservationDetailDto.ReservationId,
                 ToolId = reservationDetailDto.ToolId,
                 StartingDateTime = reservationDetailDto.StartingDateTime,
                 EndingDateTime = reservationDetailDto.EndingDateTime,
@@ -32,11 +31,10 @@ namespace ToolRental.Mappers
             };
         }
 
-        public static ReservationDetail ToReservationDetailDtoOnCreate(this ReservationDetail reservationDetailDto)
+        public static ReservationDetail ToReservationDetail(this ReservationDetailOnCreateDto reservationDetailDto)
         {
             return new ReservationDetail
             {
-                ReservationId = reservationDetailDto.ReservationId,
                 ToolId = reservationDetailDto.ToolId,
                 StartingDateTime = reservationDetailDto.StartingDateTime,
                 EndingDateTime = reservationDetailDto.EndingDateTime,
@@ -44,12 +42,11 @@ namespace ToolRental.Mappers
             };
         }
 
-        public static ReservationDetail ToReservationDetailDtoOnUpdate(this ReservationDetail reservationDetailDto)
+        public static ReservationDetail ToReservationDetail(this ReservationDetailOnUpdateDto reservationDetailDto)
         {
             return new ReservationDetail
             {
                 Id = reservationDetailDto.Id,
-                ReservationId = reservationDetailDto.ReservationId,
                 ToolId = reservationDetailDto.ToolId,
                 StartingDateTime = reservationDetailDto.StartingDateTime,
                 EndingDateTime = reservationDetailDto.EndingDateTime,

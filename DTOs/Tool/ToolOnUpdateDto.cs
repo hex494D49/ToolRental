@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ToolRental.Application.Interfaces;
 
-namespace ToolRental.DTOs.Tool
+namespace ToolRental.Web.DTOs.Tool
 {
-    public class ToolDtoOnUpdate
+    public class ToolOnUpdateDto : IToolOnUpdate
     {
         public int Id { get; set; }
 

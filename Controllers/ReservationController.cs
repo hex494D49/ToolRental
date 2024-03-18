@@ -1,47 +1,71 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ToolRental.Data;
-using ToolRental.DTOs.Reservation;
-using ToolRental.DTOs.Tool;
-using ToolRental.Interfaces;
-using ToolRental.Mappers;
+using ToolRental.Application.Interfaces;
+using ToolRental.Infrastructure.Interfaces;
+using ToolRental.Web.DTOs.Helpers;
+using ToolRental.Web.DTOs.Reservation;
+using ToolRental.Web.DTOs.ReservationDetail;
+using ToolRental.Web.Mappers;
 
-namespace ToolRental.Controllers
+namespace ToolRental.Web.Controllers
 {
     [Route("api/reservations")]
     [ApiController]
     public class ReservationController : ControllerBase
     {
-        private protected AppDbContext _context;
-        private readonly IToolRepository _repository;
+        private readonly IReservationService _service;
 
-        public ReservationController(AppDbContext context, IToolRepository repository)
+        public ReservationController(IReservationService service)
         {
-            _context = context;
-            _repository = repository;
+            _service = service;
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
-            //var reservations = _context.Reservations.ToList().Select(r => r.ToReservationDto());
+            var count = await _service.GetCount();
+            var reservationsDto = await _service.GetAllQueryable(query).Select(reservation =>
+                new ReservationDto
+                {
+                    Id = reservation.Id,
+                    FirstName = reservation.FirstName,
+                    LastName = reservation.LastName,
+                    Note = reservation.Note,
+                    ReservationDetails = reservation
+                                        .Details
+                                        .Select(reservationDetail => new ReservationDetailDto
+                                        {
+                                            Id = reservationDetail.Id,
+                                            ToolId = reservationDetail.ToolId,
+                                            ToolName = reservationDetail.Tool.Name ?? string.Empty,
+                                            StartingDateTime = reservationDetail.StartingDateTime,
+                                            EndingDateTime = reservationDetail.EndingDateTime,
+                                            PricePerHour = reservationDetail.PricePerHour,
+                                        })
+                                        .ToList()
 
-            
-            var reservations = _context.Reservations
-                                .Include(r => r.ReservationDetails)
-                                .AsQueryable()
-                                .ToList();
+                }).ToListAsync();
 
-            return Ok(reservations);
+            reservationsDto.ForEach(r => r.Total = r.ReservationDetails.Sum(x => x.PricePerHour * (decimal)(x.EndingDateTime - x.StartingDateTime).TotalHours));
+
+            var result = new
+            {
+                data = reservationsDto,
+                pager = new
+                {
+                    total = count,
+                    current = query.PageNumber
+                }
+            };
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
 
-            var reservation = _context.Reservations
-                                      .Include(r => r.ReservationDetails)
-                                      .FirstOrDefault(r => r.Id == id);
+            var reservation = await _service.GetByIdAsync(id);
 
             if (reservation == null)
             {
@@ -52,31 +76,39 @@ namespace ToolRental.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ReservationDtoOnCreate reservationDto)
+        public async Task<IActionResult> Create([FromBody] ReservationOnCreateDto reservationDto)
         {
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var reservation = reservationDto;
+            var reservation = await _service.CreateAsync(reservationDto);
 
-            //return CreatedAtAction(nameof(GetById), new { id = tool.Id }, tool.ToReservationDto());
-
-            return CreatedAtAction(nameof(reservation), reservation);
+            return CreatedAtAction(nameof(GetById), new { id = reservation.Id }, reservation.ToReservationDto());
         }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ReservationDtoOnUpdate reservationDto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ReservationOnUpdateDto reservationDto)
         {
-            return Ok();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var reservation = await _service.UpdateAsync(id, reservationDto);
+
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(reservation.ToReservationDto());
         }
 
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var reservation = _repository.DeleteAsync(id);
+            var reservation = _service.DeleteAsync(id);
 
             if (reservation == null)
             {

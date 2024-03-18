@@ -1,8 +1,9 @@
-﻿using ToolRental.DTOs.Reservation;
-using ToolRental.DTOs.Tool;
-using ToolRental.Models;
+﻿using Toolental.Domain.Models;
+using ToolRental.Web.DTOs.Reservation;
+using ToolRental.Web.DTOs.ReservationDetail;
+using ToolRental.Web.Mappers;
 
-namespace ToolRental.Mappers
+namespace ToolRental.Web.Mappers
 {
     public static class ReservationMappers
     {
@@ -15,13 +16,39 @@ namespace ToolRental.Mappers
                 LastName = reservation.LastName,
                 Note = reservation.Note,
                 ReservationDetails = reservation
-                                    .ReservationDetails
+                                    .Details
                                     .Select(r => r.ToReservationDetailDto())
+                                    .ToList(),
+                Total = reservation.Details.Sum(x => x.PricePerHour * (decimal)(x.EndingDateTime - x.StartingDateTime).TotalHours)
+            };
+
+        }
+
+        public static Reservation ToReservationDtoOnCreate(this ReservationOnCreateDto reservationDto)
+        {
+            return new Reservation
+            {
+                FirstName = reservationDto.FirstName,
+                LastName = reservationDto.LastName,
+                DateAdded = DateTime.Now,
+                LastModified = DateTime.Now,
+                Note = reservationDto.Note,
+                Status = 1,
+                Details = reservationDto
+                                    .Details
+                                    .Select(r => new ReservationDetail
+                                    {
+                                        ToolId = r.ToolId,
+                                        StartingDateTime = r.StartingDateTime,
+                                        EndingDateTime = r.EndingDateTime,
+                                        PricePerHour = r.PricePerHour
+                                    })
                                     .ToList()
             };
         }
 
-        public static Reservation ToReservation(this ReservationDto reservationDto)
+        // ovo se ne kristi nigdje
+        public static Reservation ToReservationDtoOnUpdate(this ReservationOnUpdateDto reservationDto)
         {
             return new Reservation
             {
@@ -29,38 +56,10 @@ namespace ToolRental.Mappers
                 FirstName = reservationDto.FirstName,
                 LastName = reservationDto.LastName,
                 Note = reservationDto.Note,
-                ReservationDetails = reservationDto
+                LastModified = DateTime.Now,
+                Details = reservationDto
                                     .ReservationDetails
                                     .Select(r => r.ToReservationDetail())
-                                    .ToList()
-            };
-        }
-
-        public static Reservation ToReservationDtoOnCreate(this Reservation reservation)
-        {
-            return new Reservation
-            {
-                Id = reservation.Id,
-                FirstName = reservation.FirstName,
-                LastName = reservation.LastName,
-                DateAdded = reservation.DateAdded,
-                LastModified = reservation.LastModified,
-                Note = reservation.Note,
-                Status = reservation.Status
-            };
-        }
-
-        public static ReservationDto ToReservationDtoOnUpdate(this Reservation reservation)
-        {
-            return new ReservationDto
-            {
-                Id = reservation.Id,
-                FirstName = reservation.FirstName,
-                LastName = reservation.LastName,
-                Note = reservation.Note,
-                ReservationDetails = reservation
-                                    .ReservationDetails
-                                    .Select(r => r.ToReservationDetailDto())
                                     .ToList()
             };
         }

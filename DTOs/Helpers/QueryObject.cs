@@ -1,6 +1,8 @@
-﻿namespace ToolRental.Helpers
+﻿using ToolRental.Infrastructure.Interfaces;
+
+namespace ToolRental.Web.DTOs.Helpers
 {
-    public class QueryObject
+    public class QueryObject : IQueryObject
     {
         public string? Name { get; set; } = null;
         public string? SortBy { get; set; } = null;

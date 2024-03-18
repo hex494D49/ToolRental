@@ -1,32 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ToolRental.Data;
-using ToolRental.DTOs.Tool;
-using ToolRental.Helpers;
-using ToolRental.Interfaces;
-using ToolRental.Mappers;
+using ToolRental.Application.Interfaces;
+using ToolRental.Infrastructure.Interfaces;
+using ToolRental.Web.DTOs.Helpers;
+using ToolRental.Web.DTOs.Tool;
+using ToolRental.Web.Mappers;
 
-namespace ToolRental.Controllers
+namespace ToolRental.Web.Controllers
 {
     [Route("api/tools")]
     [ApiController]
     public class ToolController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly IToolRepository _repository;
+        private readonly IToolService _service;
 
-
-        public ToolController(AppDbContext context, IToolRepository repository)
+        public ToolController(IToolService service)
         {
-            _context = context;
-            _repository = repository;
+            _service = service;
         }
-
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
-            var count = await _repository.GetCount();
-            var tools = await _repository.GetAllAsync(query);  
+            var count = await _service.GetCount();
+            var tools = await _service.GetAllAsync(query);
             var toolsDto = tools.Select(t => t.ToToolDto());
 
             var result = new
@@ -49,7 +45,7 @@ namespace ToolRental.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var tool = await _repository.GetByIdAsync(id);
+            var tool = await _service.GetByIdAsync(id);
 
             if (tool == null)
             {
@@ -60,27 +56,25 @@ namespace ToolRental.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ToolDtoOnCreate toolDto)
+        public async Task<IActionResult> Create([FromBody] ToolOnCreateDto toolDto)
         {
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var tool = toolDto.ToToolDtoOnCreate();
-            await _repository.CreateAsync(tool);
+            var tool = await _service.CreateAsync(toolDto);
 
             return CreatedAtAction(nameof(GetById), new { id = tool.Id }, tool.ToToolDto());
         }
 
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ToolDtoOnUpdate toolDto)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ToolOnUpdateDto toolDto)
         {
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var tool = await _repository.UpdateAsync(id, toolDto);
+            var tool = await _service.UpdateAsync(id, toolDto);
 
             if (tool == null)
             {
@@ -94,7 +88,7 @@ namespace ToolRental.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var tool = await _repository.DeleteAsync(id);
+            var tool = await _service.DeleteAsync(id);
 
             if (tool == null)
             {

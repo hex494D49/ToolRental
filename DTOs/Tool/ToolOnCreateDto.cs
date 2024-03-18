@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ToolRental.Application.Interfaces;
 
-namespace ToolRental.DTOs.Tool
+namespace ToolRental.Web.DTOs.Tool
 {
-    public class ToolDtoOnCreate
+    public class ToolOnCreateDto : IToolOnCreate
     {
         [Required]
         [MaxLength(128, ErrorMessage = "Name cannot be over 128 characters")]

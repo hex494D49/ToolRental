@@ -1,6 +1,6 @@
 @ToolRental_HostAddress = http://localhost:5160
 
-GET {{ToolRental_HostAddress}}/weatherforecast/
+GET {{ToolRental_HostAddress}}/api/tools/
 Accept: application/json
 
 ###
